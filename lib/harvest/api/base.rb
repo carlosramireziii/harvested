@@ -24,6 +24,8 @@ module Harvest
           params[:options] = options
           params[:method] = method
 
+          options[:query].merge!(access_token: credentials.token) if credentials.respond_to?(:token)
+
           response = HTTParty.send(method, "#{credentials.host}#{path}",
             :query => options[:query],
             :body => options[:body],

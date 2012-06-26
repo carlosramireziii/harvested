@@ -263,4 +263,16 @@ module Harvest
       @invoices ||= Harvest::API::Invoices.new(credentials)
     end
   end
+
+  class OAuthBase < Base
+
+    # @see Harvest.client
+    # @see Harvest.hardy_client
+    def initialize(token, options = {})
+      options[:ssl] = true if options[:ssl].nil?
+      @credentials = OAuthCredentials.new(token, options[:ssl])
+      raise InvalidCredentials unless credentials.valid?
+    end
+
+  end
 end

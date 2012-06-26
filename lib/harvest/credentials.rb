@@ -18,4 +18,20 @@ module Harvest
       "#{ssl ? "https" : "http"}://#{subdomain}.harvestapp.com"
     end
   end
+
+  class OAuthCredentials < Credentials
+    attr_accessor :token
+
+    def initialize(token, ssl = true)
+      @token, @ssl = token, ssl
+    end
+
+    def valid?
+      !token.nil?
+    end
+
+    def host
+      "#{ssl ? "https" : "http"}://api.harvestapp.com"
+    end
+  end
 end

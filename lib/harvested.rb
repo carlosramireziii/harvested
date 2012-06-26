@@ -38,6 +38,16 @@ module Harvest
     def client(subdomain, username, password, options = {})
       Harvest::Base.new(subdomain, username, password, options)
     end
+
+    # Creates a standard client using OAuth authentication
+    #
+    # == Examples
+    #   Harvest.client('abcdef', :ssl => false)
+    #
+    # @return [Harvest::OAuthBase]
+    def client_oauth(token, options = {})
+      Harvest::OAuthBase.new(token, options)
+    end
     
     # Creates a hardy client that will retry common HTTP errors it encounters and sleep() if it determines it is over your rate limit
     #
@@ -64,6 +74,15 @@ module Harvest
     def hardy_client(subdomain, username, password, options = {})
       retries = options.delete(:retry)
       Harvest::HardyClient.new(client(subdomain, username, password, options), (retries || 5))
+    end
+
+    # Creates a hardy client using OAuth authentication
+    #
+    # @return [Harvest::HardyClient] a Harvest::OAuthBase wrapped in Harvest::HardyClient
+    # @see Harvest::OAuthBase
+    def hardy_client_oauth(token, options = {})
+      retries = options.delete(:retry)
+      Harvest::HardyClient.new(client_oauth(token, options), (retries || 5))
     end
   end
 end
